@@ -1,6 +1,7 @@
 from nltk.corpus import ieer
 import nltk
 from nltk_contrib import timex
+from nltk.tree import *
 import mx
 import re
 
@@ -48,32 +49,40 @@ class TextSearch:
         return timex_found
 
 
+    def get_date_values(self):
+        timex_regex = re.compile(r'<TIMEX2 val="(.+?)"', re.DOTALL)
+        values_found = timex_regex.findall(self.temporal_sentences)
+        return values_found
+        
+
     def get_multiclass_chunks(self):
-        return self.multiclass_chunked_sentences
+        return self.multiclass_chunked_sentences[0]
 
 
     def get_binary_chunks(self):
-        return self.binary_chunked_sentences
+        return self.binary_chunked_sentences[0]
 
 
 
 #   Testing
 def demo():
-    s = raw_input("Enter some text: ")
 
-    text_search = TextSearch(s)
+    while True:
+        s = raw_input("Enter some text: ")
 
-    print "Binary Tags:"
-    print text_search.get_binary_chunks()
+        text_search = TextSearch(s)
 
-    print "Multiclass Tags:"
-    print text_search.get_multiclass_chunks()
+        print "Binary Tags:"
+        print text_search.get_binary_chunks()
 
-    print "Entity Names:"
-    print text_search.get_entity_names()
+        print "Multiclass Tags:"
+        print text_search.get_multiclass_chunks()
 
-    print "Sentence with Temporal Tags:"
-    print text_search.get_temporal_sentence()
+        print "Entity Names:"
+        print text_search.get_entity_names()
 
-    print "Dates:"
-    print text_search.get_dates()
+        print "Sentence with Temporal Tags:"
+        print text_search.get_temporal_sentence()
+
+        print "Dates:"
+        print text_search.get_dates()
